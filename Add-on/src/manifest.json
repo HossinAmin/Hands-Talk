@@ -1,0 +1,25 @@
+{
+  "name": "Hands Talk",
+  "version": "0.0.1",
+  "author": "3amak el jelly ya bate5a",
+  "permissions": [
+    "http://127.0.0.1:5000/*"
+  ],
+  "description": "ACL Meet allow users to communicate with non-speaking users",
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["injector.js"]
+    }
+  ],
+  "page_action": {
+    "default_icon": "icon.png",
+    "default_title": "Hands Talk",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": ["script.js"],
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 2
+}

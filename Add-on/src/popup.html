@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ACL Meet</title>
+  </head>
+  <body>
+    <style>
+      body {
+        width: 250px;
+        height: 300px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .logo-image {
+        width: 150px;
+        height: 150px;
+        transform: scale(2.0);
+      }
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .subtitle {
+        font-size: 14px;
+        color: #999;
+      }
+      #listener-button {
+        width: 100%;
+        background-color: teal;
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px 0;
+      }
+    </style>
+    <img src="/icon.png" alt="ACL Meet" class="logo-image"/>
+
+    <h1 class="title">Hands Talk</h1>
+    <p class="subtitle">Start/Stop translator using the button below</p>
+
+    <button id="listener-button">Start</button>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
