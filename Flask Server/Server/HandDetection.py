@@ -16,7 +16,7 @@ hands = mp_hands.Hands(
     min_tracking_confidence=0.5,
     max_num_hands=1)
 
-# Loading AI model
+# Loading AI model paper_26C_0
 model = tf.keras.models.load_model("Server\\paper_26C_0.h5")
 
 # All possible results
@@ -96,7 +96,7 @@ def findHandInImg(image):
         # construct results object
         result = {
             "value": letter,
-            "corrdinates": {"x_min": x_min, "y_min": y_min, "x_max": x_max, "y_max": y_max}
+            "coordinates": {"x_min": x_min, "y_min": y_min, "x_max": x_max, "y_max": y_max}
         }
 
     return result
