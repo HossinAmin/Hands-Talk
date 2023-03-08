@@ -1,12 +1,18 @@
-let capFrameButton= document.getElementById("capFrameButton");
-let video = document.getElementById("video");
-let inputCanvas = document.getElementById("inputCanvas");
+const video = document.getElementById("video");
+const inputCanvas = document.getElementById("input-canvas");
+const inputCanvasCTX = inputCanvas.getContext("2d");
+const drawCanvas = document.getElementById("over-video-canv");
+const ctx = drawCanvas.getContext("2d");
 
-function openWebCam()
-{
-    navigator.mediaDevices
+// gloable variable to revice data
+let data = {};
+
+// function declaration
+function openWebCam() {
+  navigator.mediaDevices
     .getUserMedia({
-      video: true, audio: false,
+      video: true,
+      audio: false,
     })
     .then((stream) => {
       // Changing the source of video to current stream.
@@ -18,44 +24,56 @@ function openWebCam()
     .catch(alert);
 }
 
-function putFrame()
-{
+function putFrame() {
+  // setting canvas
   inputCanvas.width = video.videoWidth;
   inputCanvas.height = video.videoHeight;
-  var canvasContext = inputCanvas.getContext("2d");
-  canvasContext.drawImage(video, 0, 0,500,500);
-  let blob = inputCanvas.toBlob((blob) => {
-    //this code runs AFTER the Blob is extracted
+  drawCanvas.width = video.videoWidth;
+  drawCanvas.height = video.videoHeight;
+
+  // draw webcam frames on canvas
+  inputCanvasCTX.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+  // turn frame into a blob to be send to server
+  inputCanvas.toBlob((blob) => {
+    //This code runs AFTER the Blob is extracted
     let fd = new FormData();
-    fd.append('field-name', blob, 'image-filename.png');
-    let req = new Request( 'http://127.0.0.1:5000/Rx_frame', {
-        method: 'POST',
-        body: fd
-    })
-    fetch(req)
-    .then(response=>response.blob())
-    .then(function(myBlob)
-    {
-      console.log(myBlob.size)
-      var imgEL = document.getElementById("disImag");
-      
-      imgEL.src = URL.createObjectURL(myBlob);
-      
-    }
-    )
+    fd.append("field-name", blob, "image-filename.png");
+    // making request
+    let req = new Request("http://127.0.0.1:5000/Rx_frame", {
+      method: "POST",
+      body: fd,
+      mode: "cors",
+    });
 
+    // Sending request
+    fetch(req).then((res) => {
+      res.json().then((json) => {
+        data = json;
+        console.log(json);
+      });
+
+      // check if res is not empyt
+      if (Object.keys(data).length > 0) {
+        drawRect(data);
+      }
+    });
   });
-
 }
 
-window.setInterval(putFrame,50)
+function drawRect(data) {
+  inputCanvasCTX.lineWidth = "2";
+  inputCanvasCTX.strokeStyle = "red";
+  inputCanvasCTX.rect(
+    data.corrdinates.x_min - 10,
+    data.corrdinates.y_min - 5,
+    Math.abs(data.corrdinates.x_max - data.corrdinates.x_min) + 10,
+    Math.abs(data.corrdinates.y_max - data.corrdinates.y_min) + 5
+  );
 
+  inputCanvasCTX.stroke();
+}
 
 // main code
 openWebCam();
-
-  
-
-
-
-
+setInterval(putFrame, 100);

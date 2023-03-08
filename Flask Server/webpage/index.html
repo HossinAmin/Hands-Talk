@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Document</title>
+  </head>
+  <body>
+    <div class="webcam-container">
+      <h1>Video:</h1>
+      <div class="video-container">
+        <video
+          playsinline
+          id="video"
+          width="1000px"
+          height="720px"
+          autoplay
+        ></video>
+        <canvas id="over-video-canv"></canvas>
+      </div>
+      <p id="output-letter   "></p>
+    </div>
 
-</head>
-<body>
-    <table>
-        <tr>
-          <td>
-            <h1>Video:</h1>
-            <video id="video" width="500px" height="500px" autoplay></video>
-            <button id="capFrameButton">capture</button>
-          </td>
-          <td>    
-            <h1>Frame:</h1>
-            <canvas id="inputCanvas"></canvas></td>
-          <td>
-            <h1>display received image</h1>
-            <img id="disImag" >
-          </td>
-        </tr>
-      </table>
-
+    <div class="output-container">
+      <h1>Output Canvas</h1>
+      <canvas id="input-canvas"></canvas>
+    </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
+
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      gap: 10%;
+    }
+    #video {
+      object-fit: fill;
+    }
+    .video-container {
+      display: flex;
+    }
+    #input-canvas {
+      width: 1000px;
+      height: 720px;
+    }
+    #over-video-canv {
+      position: absolute;
+      width: 1000px;
+      height: 720px;
+    }
+  </style>
 </html>
