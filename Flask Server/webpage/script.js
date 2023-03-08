@@ -1,11 +1,16 @@
 const video = document.getElementById("video");
-const inputCanvas = document.getElementById("input-canvas");
-const inputCanvasCTX = inputCanvas.getContext("2d");
-const drawCanvas = document.getElementById("over-video-canv");
-const ctx = drawCanvas.getContext("2d");
+const outputCanvas = document.getElementById("input-canvas");
+const outputCanvasCTX = outputCanvas.getContext("2d");
 
-// gloable variable to revice data
-let data = {};
+let previousState = {
+  x: undefined,
+  y: undefined,
+};
+
+let currentState = {
+  x: undefined,
+  y: undefined,
+};
 
 // function declaration
 function openWebCam() {
@@ -26,16 +31,9 @@ function openWebCam() {
 
 function putFrame() {
   // setting canvas
-  inputCanvas.width = video.videoWidth;
-  inputCanvas.height = video.videoHeight;
-  drawCanvas.width = video.videoWidth;
-  drawCanvas.height = video.videoHeight;
-
-  // draw webcam frames on canvas
-  inputCanvasCTX.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
   // turn frame into a blob to be send to server
-  inputCanvas.toBlob((blob) => {
+  outputCanvas.toBlob((blob) => {
     //This code runs AFTER the Blob is extracted
     let fd = new FormData();
     fd.append("field-name", blob, "image-filename.png");
@@ -49,31 +47,49 @@ function putFrame() {
     // Sending request
     fetch(req).then((res) => {
       res.json().then((json) => {
-        data = json;
-        console.log(json);
+        // check if res is not empyt
+        currentState = json;
       });
-
-      // check if res is not empyt
-      if (Object.keys(data).length > 0) {
-        drawRect(data);
-      }
     });
   });
 }
 
-function drawRect(data) {
-  inputCanvasCTX.lineWidth = "2";
-  inputCanvasCTX.strokeStyle = "red";
-  inputCanvasCTX.rect(
-    data.corrdinates.x_min - 10,
-    data.corrdinates.y_min - 5,
-    Math.abs(data.corrdinates.x_max - data.corrdinates.x_min) + 10,
-    Math.abs(data.corrdinates.y_max - data.corrdinates.y_min) + 5
-  );
+requestAnimationFrame(drawRect);
 
-  inputCanvasCTX.stroke();
+function drawRect() {
+  outputCanvas.width = video.videoWidth;
+  outputCanvas.height = video.videoHeight;
+
+  // draw webcam frames on canvas
+  outputCanvasCTX.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+  const { coordinates } = currentState;
+
+  let xDelta = Math.abs(coordinates?.x_min || 0 - previousState.x || 0);
+  let yDelta = Math.abs(coordinates?.y_min || 0 - previousState.y || 0);
+  let stepSize = (xDelta + yDelta) / 20;
+
+  let xTrace = xDelta / stepSize;
+  let yTrace = yDelta / stepSize;
+
+  outputCanvasCTX.lineWidth = "2";
+  outputCanvasCTX.strokeStyle = "red";
+  outputCanvasCTX.rect(
+    previousState.x - 10 + xTrace,
+    previousState.y - 5 + yTrace,
+    Math.abs(coordinates?.x_max - coordinates?.x_min) + 10,
+    Math.abs(coordinates?.y_max - coordinates?.y_min) + 5
+  );
+  outputCanvasCTX.stroke();
+
+  previousState = {
+    x: coordinates?.x_min,
+    y: coordinates?.y_min,
+  };
+
+  requestAnimationFrame(drawRect);
 }
 
 // main code
 openWebCam();
 setInterval(putFrame, 100);
+// setInterval(drawRect, 100);
