@@ -91,5 +91,5 @@ function drawRect() {
 
 // main code
 openWebCam();
-setInterval(putFrame, 100);
+setInterval(putFrame, 150);
 // setInterval(drawRect, 100);
