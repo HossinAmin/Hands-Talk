@@ -12,6 +12,19 @@ let currentState = {
   y: undefined,
 };
 
+let currentLetterQuery = [];
+let letterBuffer = [];
+const dictionary = {
+  CCC: "Let us go",
+};
+
+document.body.onkeydown = function (e) {
+  if (e.key == " " || e.code == "Space" || e.keyCode == 32) {
+    e.preventDefault();
+    letterBuffer = [];
+  }
+};
+
 // function declaration
 function openWebCam() {
   navigator.mediaDevices
@@ -49,6 +62,7 @@ function putFrame() {
       res.json().then((json) => {
         // check if res is not empyt
         currentState = json;
+        currentLetterQuery.push(json.value);
       });
     });
   });
@@ -89,7 +103,32 @@ function drawRect() {
   requestAnimationFrame(drawRect);
 }
 
+const getDurationAverageLetter = () => {
+  //Finding the most frequent character in an array javascript using filter
+  const averageLetter = currentLetterQuery
+    .sort(
+      (a, b) =>
+        currentLetterQuery.filter((v) => v === a).length -
+        currentLetterQuery.filter((v) => v === b).length
+    )
+    .pop();
+
+  if (averageLetter) {
+    letterBuffer.push(averageLetter);
+  }
+  currentLetterQuery = [];
+};
+
+const parseLetterBuffer = () => {
+  if (letterBuffer.length === 3) {
+    const phrase = dictionary[letterBuffer.join("")];
+    letterBuffer = [];
+    return phrase;
+  }
+};
+
 // main code
 openWebCam();
 setInterval(putFrame, 150);
-// setInterval(drawRect, 100);
+setInterval(getDurationAverageLetter, 2000);
+setInterval(parseLetterBuffer, 2000);
