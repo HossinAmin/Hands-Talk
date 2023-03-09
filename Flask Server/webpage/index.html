@@ -27,10 +27,8 @@ Ahmed mahran, [3/8/2023 6:47 PM]
       <div id="main-video-container">
         <video id="video"></video>
         <canvas id="input-canvas"></canvas>
-        <button class="material-symbols-rounded">mic_off</button>
-        <div id="you-text">
-          <p>You</p>
-        </div>
+        <p id="letter" style="color: white"></p>
+        <p id="phrase" style="color: white"></p>
       </div>
       <div id="sub-video-containers">
         <div class="sub-container">
@@ -141,13 +139,17 @@ Ahmed mahran, [3/8/2023 6:47 PM]
       align-self: flex-start;
       margin-left: 30px;
     }
-    #you-text {
-      font-size: 25px;
+    #letter {
+      font-size: 30px;
       font-weight: bold;
       color: white;
-      align-self: flex-start;
-      margin-left: 30px;
-      margin-top: 830px;
+      align-self: center;
+    }
+    #phrase {
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      align-self: center;
     }
     .material-symbols-rounded {
       font-variation-settings: "FILL" 10, "wght" 400, "GRAD" 0, "opsz" 48;
@@ -216,15 +218,18 @@ Ahmed mahran, [3/8/2023 6:47 PM]
       border: none;
     }
     #info {
-      background-color: white;
+      background-color: #1f1f1f;
+      color: white;
       border: none;
     }
     #group {
-      background-color: white;
+      background-color: #1f1f1f;
+      color: white;
       border: none;
     }
     #chat {
-      background-color: white;
+      background-color: #1f1f1f;
+      color: white;
       border: none;
     }
   </style>

@@ -22,6 +22,8 @@ document.body.onkeydown = function (e) {
   if (e.key == " " || e.code == "Space" || e.keyCode == 32) {
     e.preventDefault();
     letterBuffer = [];
+    const phrase = document.getElementById("phrase");
+    phrase.innerText = "";
   }
 };
 
@@ -115,15 +117,25 @@ const getDurationAverageLetter = () => {
 
   if (averageLetter) {
     letterBuffer.push(averageLetter);
+
+    const letter = document.getElementById("letter");
+    letter.innerText = letterBuffer.join(" - ");
   }
   currentLetterQuery = [];
 };
 
 const parseLetterBuffer = () => {
   if (letterBuffer.length === 3) {
-    const phrase = dictionary[letterBuffer.join("")];
+    const dictionaryParse = dictionary[letterBuffer.join("")];
     letterBuffer = [];
-    return phrase;
+
+    if (dictionaryParse) {
+      const phrase = document.getElementById("phrase");
+      phrase.innerText = dictionaryParse;
+    } else {
+      const phrase = document.getElementById("phrase");
+      phrase.innerText = "No Translation???";
+    }
   }
 };
 
