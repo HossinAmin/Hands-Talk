@@ -15,7 +15,9 @@ let currentState = {
 let currentLetterQuery = [];
 let letterBuffer = [];
 const dictionary = {
-  CCC: "Let us go",
+  CCC: "Thanks for the help",
+  BBB: "Can you include more info",
+  EEE: "Let's put a pin in that",
 };
 
 document.body.onkeydown = function (e) {
@@ -24,6 +26,8 @@ document.body.onkeydown = function (e) {
     letterBuffer = [];
     const phrase = document.getElementById("phrase");
     phrase.innerText = "";
+    const letter = document.getElementById("letter");
+    letter.innerText = "";
   }
 };
 
